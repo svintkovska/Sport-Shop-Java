@@ -55,18 +55,7 @@ public class ProductController {
     }
 
 
-    @PostMapping("/create")
-    public ResponseEntity<Object> createProduct(@Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult, Principal principal) {
-        ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
 
-        if(!ObjectUtils.isEmpty(errors)){
-            return errors;
-        }
-        Product product = productService.saveProduct(productDTO, principal);
-
-        ProductDTO createdProduct = productFacade.productToProductDTO(product);
-        return new ResponseEntity<>(createdProduct, HttpStatus.OK);
-    }
 
 
 }

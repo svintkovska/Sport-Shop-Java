@@ -1,6 +1,7 @@
 package com.example.springbootshop.services;
 
 import com.example.springbootshop.entities.Category;
+import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,12 @@ public class CategoryService {
     public Category createCategory(Category category) {
         return categoryRepository.save(category);
     }
-    public Category updateCategory(Category category) {
+    public Category updateCategory(Long id, Category category) {
+        Category cat = categoryRepository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Category not found with id " + id));
+
+        cat.setName(category.getName());
+
         return categoryRepository.save(category);
     }
 

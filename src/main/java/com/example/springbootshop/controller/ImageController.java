@@ -2,13 +2,12 @@ package com.example.springbootshop.controller;
 
 import com.example.springbootshop.entities.Image;
 import com.example.springbootshop.entities.Product;
-import com.example.springbootshop.exceptions.ImageNotFoundException;
+import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.services.ImageService;
 import com.example.springbootshop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,7 +56,7 @@ public class ImageController {
     public ResponseEntity<Image> getImageToProduct(@PathVariable("productId") Long id) throws FileNotFoundException {
         Image imageToProduct =
                 imageService.getImageToProduct(id)
-                        .orElseThrow(()->new ImageNotFoundException("Cannot find image to Product " + id));
+                        .orElseThrow(()->new EntityNotFoundException("Cannot find image to Product " + id));
 
         System.out.println("id=" + imageToProduct.getIdImage());
         System.out.println("name=" + imageToProduct.getName());

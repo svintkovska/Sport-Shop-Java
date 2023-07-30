@@ -6,10 +6,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 //import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.Set;
@@ -18,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Table(name = "products")
 public class Product {
     @Id
@@ -40,8 +38,7 @@ public class Product {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-    @OneToOne(mappedBy = "product")
-    private Rating rating;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

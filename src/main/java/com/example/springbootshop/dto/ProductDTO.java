@@ -11,7 +11,9 @@ public class ProductDTO {
     private Long idProduct;
     private String title;
     private Double price;
-    private Rating rating;
     private Category category;
+    private String color;
+    private String size;
+    private String brand;
     Set<Image> images;
 }

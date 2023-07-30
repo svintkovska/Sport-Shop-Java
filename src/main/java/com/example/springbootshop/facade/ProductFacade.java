@@ -12,8 +12,10 @@ public class ProductFacade {
         productDTO.setIdProduct(product.getIdProduct());
         productDTO.setTitle(product.getTitle());
         productDTO.setPrice(product.getPrice());
+        productDTO.setColor(product.getColor());
+        productDTO.setSize(product.getSize());
+        productDTO.setBrand(product.getBrand());
         productDTO.setImages(product.getImages());
-        productDTO.setRating(product.getRating());
         productDTO.setCategory(product.getCategory());
         return productDTO;
     }
