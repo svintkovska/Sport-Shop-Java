@@ -6,7 +6,10 @@ import com.example.springbootshop.security.requests.SignupRequest;
 import com.example.springbootshop.security.responses.JwtTokenSuccessResponse;
 import com.example.springbootshop.services.UserService;
 import com.example.springbootshop.validation.ResponseErrorValidation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,5 +69,17 @@ public class AuthController {
         userService.createUser(signupRequest);
 
         return ResponseEntity.ok("User registered successfully");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String jwtToken = authorizationHeader.substring(7); // Remove the "Bearer " prefix
+            response.setHeader("Authorization", "");
+            return ResponseEntity.ok("Logout successful");
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Authorization header");
     }
 }
