@@ -14,8 +14,11 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cart")
     private Long idCart;
+
     @ManyToOne
     private User user;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", orphanRemoval = true)
     private Set<CartItem> cartItems = new HashSet<>();
+
 }

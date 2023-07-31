@@ -2,9 +2,11 @@ package com.example.springbootshop.controller;
 
 import com.example.springbootshop.dto.ProductDTO;
 import com.example.springbootshop.entities.Category;
+import com.example.springbootshop.entities.Order;
 import com.example.springbootshop.entities.Product;
 import com.example.springbootshop.facade.ProductFacade;
 import com.example.springbootshop.services.CategoryService;
+import com.example.springbootshop.services.OrderService;
 import com.example.springbootshop.services.ProductService;
 import com.example.springbootshop.validation.ResponseErrorValidation;
 import jakarta.validation.Valid;
@@ -24,14 +26,16 @@ public class AdminController {
     private final ProductService productService;
     private final ProductFacade productFacade;
     private final CategoryService categoryService;
+    private final OrderService orderService;
 
     private final ResponseErrorValidation responseErrorValidation;
 
     @Autowired
-    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, ResponseErrorValidation responseErrorValidation) {
+    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, OrderService orderService, ResponseErrorValidation responseErrorValidation) {
         this.productService = productService;
         this.productFacade = productFacade;
         this.categoryService = categoryService;
+        this.orderService = orderService;
         this.responseErrorValidation = responseErrorValidation;
     }
 
@@ -91,7 +95,11 @@ public class AdminController {
         return new ResponseEntity<>("Category deleted successfully", HttpStatus.OK);
     }
 
-
+    @PutMapping("/order/{orderId}/status/{orderStatusId}")
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @PathVariable Long orderStatusId) {
+        Order updatedOrder = orderService.updateOrderStatus(orderId, orderStatusId);
+        return ResponseEntity.ok(updatedOrder);
+    }
 
 
 }

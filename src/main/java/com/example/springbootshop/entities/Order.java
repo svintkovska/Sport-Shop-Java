@@ -20,4 +20,8 @@ public class Order {
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
 
+    @ManyToOne
+    @JoinColumn(name = "order_status_id")
+    private OrderStatus orderStatus;
+
 }

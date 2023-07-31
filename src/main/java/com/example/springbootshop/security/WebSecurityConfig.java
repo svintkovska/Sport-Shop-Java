@@ -30,15 +30,12 @@ public class WebSecurityConfig {
 
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-
     private final UserDetailsServiceImpl userDetailsService;
 
     public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserDetailsServiceImpl userDetailsService) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.userDetailsService = userDetailsService;
     }
-
 
     @Bean
     @Order(1)
@@ -85,10 +82,3 @@ public class WebSecurityConfig {
     }
 
 }
-//    @Bean
-//    public AuthenticationProvider daoauthenticationProvider() {
-//        System.out.println("Заходимо сюди");
-//        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-//        daoAuthenticationProvider.setUserDetailsService(userService);
-//        return daoAuthenticationProvider;
-//    }
