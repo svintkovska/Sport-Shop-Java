@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("product/{id}").permitAll()
                                 .requestMatchers("image/**").permitAll()
                                 .requestMatchers("/api/auth/*").permitAll()
-                                .requestMatchers("product/crete").authenticated()
+                                .requestMatchers("product/create").authenticated()
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
 //                        .requestMatchers("/profile/**").hasRole("USER")
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
