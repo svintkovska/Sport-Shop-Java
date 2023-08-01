@@ -32,7 +32,7 @@ public class CategoryService {
 
         cat.setName(category.getName());
 
-        return categoryRepository.save(category);
+        return categoryRepository.save(cat);
     }
 
     public void deleteCategory(Long categoryId) {

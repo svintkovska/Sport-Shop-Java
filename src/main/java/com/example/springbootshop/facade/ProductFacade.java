@@ -15,6 +15,7 @@ public class ProductFacade {
         productDTO.setColor(product.getColor());
         productDTO.setSize(product.getSize());
         productDTO.setBrand(product.getBrand());
+        productDTO.setDescription(product.getDescription());
         productDTO.setImages(product.getImages());
         productDTO.setCategory(product.getCategory());
         return productDTO;

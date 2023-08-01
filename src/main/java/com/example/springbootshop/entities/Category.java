@@ -15,4 +15,10 @@ public class Category {
     private Long idCategory;
     private String name;
 
+    public Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
 }

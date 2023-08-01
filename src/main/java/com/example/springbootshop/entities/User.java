@@ -35,8 +35,7 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 

@@ -15,5 +15,6 @@ public class ProductDTO {
     private String color;
     private String size;
     private String brand;
+    private String description;
     Set<Image> images;
 }

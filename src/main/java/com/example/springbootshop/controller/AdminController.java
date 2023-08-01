@@ -46,12 +46,12 @@ public class AdminController {
         if(!ObjectUtils.isEmpty(errors)){
             return errors;
         }
-        Product product = productService.saveProduct(productDTO, principal);
+        Product product = productService.saveProduct(productDTO);
 
         ProductDTO createdProduct = productFacade.productToProductDTO(product);
         return new ResponseEntity<>(createdProduct, HttpStatus.OK);
     }
-    @PostMapping("/product/update/{id}")
+    @PutMapping("/product/update/{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO, BindingResult bindingResult) {
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
         if (!ObjectUtils.isEmpty(errors)) {

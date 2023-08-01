@@ -34,13 +34,21 @@ public class Product {
     private String description;
     @OneToMany(mappedBy = "productId")
     Set<Image>images;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
+
+
+    public Product(@Nullable String title, Double price, String color, String size, String brand, String description, Category category) {
+        this.title = title;
+        this.price = price;
+        this.color = color;
+        this.size = size;
+        this.brand = brand;
+        this.description = description;
+        this.category = category;
+    }
+
 
 }
