@@ -38,6 +38,9 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+//    @ToString.Exclude
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Cart cart;
     public User() {}
 
     @Override

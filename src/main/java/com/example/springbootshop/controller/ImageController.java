@@ -33,7 +33,7 @@ public class ImageController {
     @PostMapping("/{productId}/upload")
     public ResponseEntity.BodyBuilder uploadImageToProduct(@PathVariable("productId") Long id,
                                                            @RequestParam("file") MultipartFile file) throws IOException {
-        Product product = productService.getById(id);
+        Product product = productService.getById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));;
         imageService.uploadImageToProduct(file, product);
         return ResponseEntity.ok();
     }

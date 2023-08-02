@@ -1,7 +1,10 @@
 package com.example.springbootshop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +18,8 @@ public class Cart {
     @Column(name = "id_cart")
     private Long idCart;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart", orphanRemoval = true)

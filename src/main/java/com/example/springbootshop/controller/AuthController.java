@@ -1,9 +1,11 @@
 package com.example.springbootshop.controller;
 
+import com.example.springbootshop.entities.User;
 import com.example.springbootshop.security.JwtTokenProvider;
 import com.example.springbootshop.security.requests.LoginRequest;
 import com.example.springbootshop.security.requests.SignupRequest;
 import com.example.springbootshop.security.responses.JwtTokenSuccessResponse;
+import com.example.springbootshop.services.CartService;
 import com.example.springbootshop.services.UserService;
 import com.example.springbootshop.validation.ResponseErrorValidation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,8 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/auth")
@@ -28,13 +32,15 @@ public class AuthController {
 
 
     private final UserService userService;
+    private final CartService cartService;
     private final ResponseErrorValidation validation;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService, ResponseErrorValidation validation, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, CartService cartService, ResponseErrorValidation validation, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
 
         this.userService = userService;
+        this.cartService = cartService;
         this.validation = validation;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
@@ -46,14 +52,19 @@ public class AuthController {
         ResponseEntity<Object> errors = validation.mapValidationService(bindingResult);
         if(!ObjectUtils.isEmpty(errors)){
             System.out.println("errors = " + errors);
-
             return errors;
         }
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = (User) authentication.getPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        Principal principal = SecurityContextHolder.getContext().getAuthentication();
+        cartService.createOrGetCartForUser(principal);
+
         String jwt = "Bearer " + jwtTokenProvider.generateToken(authentication);
 
         return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwt) );

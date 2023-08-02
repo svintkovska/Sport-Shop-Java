@@ -55,11 +55,11 @@ public class WebSecurityConfig {
                                 .requestMatchers("category/{id}").permitAll()
                                 .requestMatchers("image/**").permitAll()
                                 .requestMatchers("/auth/*").permitAll()
-                                .requestMatchers("/cart/*").permitAll()
-                                .requestMatchers("/order/*").permitAll()
-                                .requestMatchers("/user/*").authenticated()
+                                .requestMatchers("/cart/**").authenticated()
+                                .requestMatchers("/order/**").authenticated()
+                                .requestMatchers("/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/profile/**").hasRole("USER")
+                        //.requestMatchers("/profile/**").hasRole("USER")
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

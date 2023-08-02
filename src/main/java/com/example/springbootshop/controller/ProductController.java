@@ -2,6 +2,7 @@ package com.example.springbootshop.controller;
 
 import com.example.springbootshop.dto.ProductDTO;
 import com.example.springbootshop.entities.Product;
+import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.facade.ProductFacade;
 import com.example.springbootshop.services.ProductService;
 import com.example.springbootshop.validation.ResponseErrorValidation;
@@ -50,7 +51,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
-        Product productById = productService.getById(id);
+        Product productById = productService.getById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
         return new ResponseEntity<>(productById, HttpStatus.OK);
     }
 

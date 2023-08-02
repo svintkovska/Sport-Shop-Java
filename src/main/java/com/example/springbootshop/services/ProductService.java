@@ -2,16 +2,13 @@ package com.example.springbootshop.services;
 
 import com.example.springbootshop.dto.ProductDTO;
 import com.example.springbootshop.entities.Product;
-import com.example.springbootshop.entities.User;
 import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.repositories.ProductRepository;
-import com.example.springbootshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -29,8 +26,8 @@ public class ProductService {
     }
 
 
-    public Product getById(Long id) {
-        return productRepository.findById(id).orElseGet(Product::new);
+    public Optional<Product> getById(Long id) {
+        return productRepository.findById(id);
     }
 
     public Product saveProduct(ProductDTO productDTO) {
