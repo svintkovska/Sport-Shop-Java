@@ -1,9 +1,7 @@
 package com.example.springbootshop.security;
 
 import com.example.springbootshop.entities.User;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Component;
@@ -25,27 +23,28 @@ public class JwtTokenProvider {
                 .setSubject(Long.toString(user.getId()))
                 .addClaims(claimsMap)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+ 600))
+                .setExpiration(new Date(System.currentTimeMillis()+ 24 * 60 * 60 * 1000))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
                 .compact();
     }
 
-    public boolean validateToken(String token){
-        try{
-            Jwts.parser().setSigningKey(SecurityConstants.SECRET)
-                    .parseClaimsJwt(token);
-        }catch (Exception e){
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException e) {
+            return false;
+        } catch (ExpiredJwtException e) {
+            return false;
+        } catch (Exception e) {
             return false;
         }
-
-        return true;
     }
 
-    public Long getUserIdByToken(String token){
+    public Long getUserIdByToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET)
-                .parseClaimsJwt(token).getBody();
-        Long id = (Long) claims.get("id");
+                .parseClaimsJws(token).getBody();
+        Long id = Long.parseLong(claims.get("id", String.class));
         return id;
-
     }
 }

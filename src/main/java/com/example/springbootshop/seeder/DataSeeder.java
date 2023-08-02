@@ -2,11 +2,9 @@ package com.example.springbootshop.seeder;
 
 import com.example.springbootshop.entities.*;
 import com.example.springbootshop.exceptions.EntityNotFoundException;
-import com.example.springbootshop.repositories.CategoryRepository;
-import com.example.springbootshop.repositories.OrderStatusRepository;
-import com.example.springbootshop.repositories.ProductRepository;
-import com.example.springbootshop.repositories.RoleRepository;
+import com.example.springbootshop.repositories.*;
 import jakarta.annotation.PostConstruct;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -16,15 +14,19 @@ import java.util.List;
 
 public class DataSeeder {
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
     private final OrderStatusRepository orderStatusRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public DataSeeder(RoleRepository roleRepository, OrderStatusRepository orderStatusRepository, CategoryRepository categoryRepository, ProductRepository productRepository) {
+    public DataSeeder(RoleRepository roleRepository, UserRepository userRepository, OrderStatusRepository orderStatusRepository, CategoryRepository categoryRepository, ProductRepository productRepository, BCryptPasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
+        this.userRepository = userRepository;
         this.orderStatusRepository = orderStatusRepository;
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -33,6 +35,18 @@ public class DataSeeder {
             Role roleUser = new Role(ERole.ROLE_USER);
             Role roleAdmin = new Role(ERole.ROLE_ADMIN);
             roleRepository.saveAll(Arrays.asList(roleUser, roleAdmin));
+        }
+        if (userRepository.count() == 0) {
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                    .orElseThrow(() -> new EntityNotFoundException("Admin role not found"));
+
+            User adminUser = new User();
+            adminUser.setName("admin");
+            adminUser.setUsername("admin");
+            adminUser.setEmail("admin@gmail.com");
+            adminUser.setPassword(passwordEncoder.encode("admin"));
+            adminUser.getRoles().add(adminRole);
+            userRepository.save(adminUser);
         }
         if (orderStatusRepository.count() == 0) {
             OrderStatus created = new OrderStatus(EOrderStatus.CREATED);

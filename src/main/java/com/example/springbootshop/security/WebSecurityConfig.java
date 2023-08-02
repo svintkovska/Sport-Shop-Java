@@ -41,7 +41,7 @@ public class WebSecurityConfig {
     @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/api/**")
+                .securityMatcher("/**")
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
@@ -51,13 +51,16 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/", "product/all").permitAll()
                                 .requestMatchers("product/{id}").permitAll()
+                                .requestMatchers("/", "category/all").permitAll()
+                                .requestMatchers("category/{id}").permitAll()
                                 .requestMatchers("image/**").permitAll()
-                                .requestMatchers("/api/auth/*").permitAll()
-                                .requestMatchers("product/create").authenticated()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/profile/**").hasRole("USER")
+                                .requestMatchers("/auth/*").permitAll()
+                                .requestMatchers("/cart/*").permitAll()
+                                .requestMatchers("/order/*").permitAll()
+                                .requestMatchers("/user/*").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/profile/**").hasRole("USER")
                 ).addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginPage("/login"));
         return http.build();
     }
 
