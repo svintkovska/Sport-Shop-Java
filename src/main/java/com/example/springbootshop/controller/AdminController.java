@@ -2,15 +2,9 @@ package com.example.springbootshop.controller;
 
 import com.example.springbootshop.dto.OrderDTO;
 import com.example.springbootshop.dto.ProductDTO;
-import com.example.springbootshop.entities.Category;
-import com.example.springbootshop.entities.OrderEntity;
-import com.example.springbootshop.entities.OrderStatus;
-import com.example.springbootshop.entities.Product;
+import com.example.springbootshop.entities.*;
 import com.example.springbootshop.facade.ProductFacade;
-import com.example.springbootshop.services.CategoryService;
-import com.example.springbootshop.services.OrderService;
-import com.example.springbootshop.services.OrderStatusService;
-import com.example.springbootshop.services.ProductService;
+import com.example.springbootshop.services.*;
 import com.example.springbootshop.validation.ResponseErrorValidation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/admin")
@@ -32,15 +27,17 @@ public class AdminController {
     private final CategoryService categoryService;
     private final OrderService orderService;
     private final OrderStatusService orderStatusService;
+    private final UserService userService;
     private final ResponseErrorValidation responseErrorValidation;
 
     @Autowired
-    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, OrderService orderService, OrderStatusService orderStatusService, ResponseErrorValidation responseErrorValidation) {
+    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, OrderService orderService, OrderStatusService orderStatusService, UserService userService, ResponseErrorValidation responseErrorValidation) {
         this.productService = productService;
         this.productFacade = productFacade;
         this.categoryService = categoryService;
         this.orderService = orderService;
         this.orderStatusService = orderStatusService;
+        this.userService = userService;
         this.responseErrorValidation = responseErrorValidation;
     }
 
@@ -115,5 +112,15 @@ public class AdminController {
         List<OrderDTO> orders = orderService.getAllOrders();
 
         return ResponseEntity.ok(orders);
+    }
+    @GetMapping("/roles/all")
+    public ResponseEntity<List<Role>> getAllRoles() {
+        List<Role> roles = userService.getAllRoles();
+        return ResponseEntity.ok(roles);
+    }
+    @PutMapping("/user/{userId}/roles")
+    public ResponseEntity<User> changeUserRoles(@PathVariable Long userId, @RequestBody Set<ERole> newRoles) {
+        User updatedUser = userService.changeUserRoles(userId, newRoles);
+        return ResponseEntity.ok(updatedUser);
     }
 }

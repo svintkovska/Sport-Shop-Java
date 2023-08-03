@@ -29,7 +29,7 @@ public class CartService {
     public Cart createOrGetCartForUser(Principal principal) {
         User user = (User) ((Authentication) principal).getPrincipal();
 
-        Cart existingCart = cartRepository.findByUser(user).orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+        Cart existingCart = cartRepository.findByUser(user).orElse(null);
         if (existingCart != null) {
             return existingCart;
         }

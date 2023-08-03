@@ -3,6 +3,7 @@ package com.example.springbootshop.services;
 import com.example.springbootshop.entities.ERole;
 import com.example.springbootshop.entities.Role;
 import com.example.springbootshop.entities.User;
+import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.repositories.RoleRepository;
 import com.example.springbootshop.repositories.UserRepository;
 import com.example.springbootshop.security.requests.SignupRequest;
@@ -11,6 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService  {
@@ -57,6 +61,20 @@ public class UserService  {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
+    }
+
+    public User changeUserRoles(Long userId, Set<ERole> newRoles) {
+        User user = getUserById(userId);
+        Set<Role> roles = newRoles.stream()
+                .map(role -> roleRepository.findByName(role).orElseThrow(() -> new EntityNotFoundException("Role not found: " + role)))
+                .collect(Collectors.toSet());
+
+        user.setRoles(roles);
+        return userRepository.save(user);
     }
 }
 

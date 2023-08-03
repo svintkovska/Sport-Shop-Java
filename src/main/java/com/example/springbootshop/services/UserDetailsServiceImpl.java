@@ -29,19 +29,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(()->new UsernameNotFoundException("Username not found: " + username));
 
         return user;
-        //return build(user);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Set<ERole> roles) {
         return roles.stream().map(eRole -> new SimpleGrantedAuthority(eRole.name())).toList();
     }
-
-//    private  UserDetails build(User user){
-//        List<GrantedAuthority> authorities = user.getRoles().stream()
-//                .map(eRole -> new SimpleGrantedAuthority(eRole.getName().name()))
-//                .collect(Collectors.toList());
-//        return new User(user.getId(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
-//    }
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
