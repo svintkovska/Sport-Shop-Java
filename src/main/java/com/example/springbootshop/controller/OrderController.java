@@ -1,8 +1,13 @@
 package com.example.springbootshop.controller;
 
-import com.example.springbootshop.entities.Order;
+import com.example.springbootshop.dto.OrderWithProductsDTO;
+import com.example.springbootshop.entities.Cart;
+import com.example.springbootshop.entities.OrderEntity;
+import com.example.springbootshop.entities.User;
+import com.example.springbootshop.services.CartService;
 import com.example.springbootshop.services.OrderService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,26 +18,35 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    public final CartService cartService;
 
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, CartService cartService) {
         this.orderService = orderService;
+        this.cartService = cartService;
     }
 
-    @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        Order createdOrder = orderService.createOrder(order);
-        return ResponseEntity.ok(createdOrder);
+    @PostMapping("/makeOrder")
+    public ResponseEntity<OrderEntity> makeOrder(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Cart cart = cartService.getCartByUser(user);
+        OrderEntity createdOrderEntity = orderService.makeOrder(user, cart);
+        return ResponseEntity.ok(createdOrderEntity);
     }
-
-    @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
-        Order order = orderService.getOrderById(orderId);
-        return ResponseEntity.ok(order);
+    @GetMapping("/history")
+    public ResponseEntity<List<OrderWithProductsDTO>> getOrderHistory(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        List<OrderWithProductsDTO> orderHistory = orderService.getOrderHistory(user);
+        return ResponseEntity.ok(orderHistory);
     }
-
-    @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
-    }
+//    @GetMapping("/{orderId}")
+//    public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
+//        Order order = orderService.getOrderById(orderId);
+//        return ResponseEntity.ok(order);
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<Order>> getAllOrders() {
+//        List<Order> orders = orderService.getAllOrders();
+//        return ResponseEntity.ok(orders);
+//    }
 }

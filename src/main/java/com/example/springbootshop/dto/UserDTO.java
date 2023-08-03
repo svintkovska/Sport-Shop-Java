@@ -9,4 +9,12 @@ public class UserDTO {
     private String name;
     private String username;
 
+    public UserDTO(Long id, String name, String username) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+    }
+
+    public UserDTO() {
+    }
 }

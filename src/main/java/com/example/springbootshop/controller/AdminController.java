@@ -1,12 +1,15 @@
 package com.example.springbootshop.controller;
 
+import com.example.springbootshop.dto.OrderDTO;
 import com.example.springbootshop.dto.ProductDTO;
 import com.example.springbootshop.entities.Category;
-import com.example.springbootshop.entities.Order;
+import com.example.springbootshop.entities.OrderEntity;
+import com.example.springbootshop.entities.OrderStatus;
 import com.example.springbootshop.entities.Product;
 import com.example.springbootshop.facade.ProductFacade;
 import com.example.springbootshop.services.CategoryService;
 import com.example.springbootshop.services.OrderService;
+import com.example.springbootshop.services.OrderStatusService;
 import com.example.springbootshop.services.ProductService;
 import com.example.springbootshop.validation.ResponseErrorValidation;
 import jakarta.validation.Valid;
@@ -18,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -27,15 +31,16 @@ public class AdminController {
     private final ProductFacade productFacade;
     private final CategoryService categoryService;
     private final OrderService orderService;
-
+    private final OrderStatusService orderStatusService;
     private final ResponseErrorValidation responseErrorValidation;
 
     @Autowired
-    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, OrderService orderService, ResponseErrorValidation responseErrorValidation) {
+    public AdminController(ProductService productService, ProductFacade productFacade, CategoryService categoryService, OrderService orderService, OrderStatusService orderStatusService, ResponseErrorValidation responseErrorValidation) {
         this.productService = productService;
         this.productFacade = productFacade;
         this.categoryService = categoryService;
         this.orderService = orderService;
+        this.orderStatusService = orderStatusService;
         this.responseErrorValidation = responseErrorValidation;
     }
 
@@ -94,12 +99,21 @@ public class AdminController {
         categoryService.deleteCategory(id);
         return new ResponseEntity<>("Category deleted successfully", HttpStatus.OK);
     }
-
+    @GetMapping("/orderStatus/all")
+    public ResponseEntity<List<OrderStatus>> getAllOrderStatuses() {
+        List<OrderStatus> orderStatuses = orderStatusService.getAllOrderStatuses();
+        return ResponseEntity.ok(orderStatuses);
+    }
     @PutMapping("/order/{orderId}/status/{orderStatusId}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @PathVariable Long orderStatusId) {
-        Order updatedOrder = orderService.updateOrderStatus(orderId, orderStatusId);
-        return ResponseEntity.ok(updatedOrder);
+    public ResponseEntity<OrderEntity> updateOrderStatus(@PathVariable Long orderId, @PathVariable Long orderStatusId) {
+        OrderEntity updatedOrderEntity = orderService.updateOrderStatus(orderId, orderStatusId);
+        return ResponseEntity.ok(updatedOrderEntity);
     }
 
+    @GetMapping("/order/getAll")
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
+        List<OrderDTO> orders = orderService.getAllOrders();
 
+        return ResponseEntity.ok(orders);
+    }
 }

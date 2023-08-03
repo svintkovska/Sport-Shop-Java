@@ -88,7 +88,7 @@ public class CartService {
         List<CartItem> cartItems = cartItemRepository.findAll();
         List<CartItem> cartItemsToDelete = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-            if(cartItem.getIdCartItem() == cartId){
+            if(cartItem.getCart().getIdCart() == cartId){
                 cartItemsToDelete.add(cartItem);
             }
         }
@@ -96,6 +96,8 @@ public class CartService {
         cartItemRepository.deleteAll(cartItemsToDelete);
 
     }
-
+    public List<CartItem> getCartItemsByCart(Cart cart) {
+        return cartItemRepository.findByCart(cart);
+    }
 
 }

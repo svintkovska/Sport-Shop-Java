@@ -4,18 +4,21 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Data
-public class Order {
+public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_order")
     private Long idOrder;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
@@ -23,5 +26,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "order_status_id")
     private OrderStatus orderStatus;
+
 
 }
