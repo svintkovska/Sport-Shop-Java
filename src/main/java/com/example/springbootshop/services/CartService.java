@@ -52,14 +52,28 @@ public class CartService {
 
 
     public CartItem addToCart(Cart cart, CartItem cartItem) {
-        Long id = cartItem.getProduct().getIdProduct();
-        Product product = productService.getById(id).orElseThrow(() -> new EntityNotFoundException("Product not found"));
+        Long productId = cartItem.getProduct().getIdProduct();
+        List<CartItem> existingCartItems = cartItemRepository.findByCart(cart);
+
+        CartItem existingCartItem = existingCartItems.stream()
+                .filter(item -> item.getProduct().getIdProduct().equals(productId))
+                .findFirst()
+                .orElse(null);
+
+        if (existingCartItem != null) {
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItem.getQuantity());
+            return cartItemRepository.save(existingCartItem);
+        }
+
+
+        Product product = productService.getById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
         cartItem.setProduct(product);
         cartItem.setCart(cart);
+
         return cartItemRepository.save(cartItem);
     }
-
-
     public Cart removeFromCart(Long cartId, Long cartItemId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
@@ -99,5 +113,17 @@ public class CartService {
     public List<CartItem> getCartItemsByCart(Cart cart) {
         return cartItemRepository.findByCart(cart);
     }
+    public double getTotalPriceOfCartItems(Cart cart) {
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
 
+        double totalPrice = 0.0;
+        for (CartItem cartItem : cartItems) {
+            double productPrice = cartItem.getProduct().getPrice().doubleValue();
+            int quantity = cartItem.getQuantity();
+            double itemTotal = productPrice * quantity;
+            totalPrice += itemTotal;
+        }
+
+        return totalPrice;
+    }
 }

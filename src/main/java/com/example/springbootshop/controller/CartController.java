@@ -68,5 +68,15 @@ public class CartController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/totalPrice")
+    public ResponseEntity<Double> getTotalPriceOfCartItems(Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Cart cart = cartService.getCartByUser(user);
+
+        double totalPrice = cartService.getTotalPriceOfCartItems(cart);
+
+        return ResponseEntity.ok(totalPrice);
+    }
+
 
 }
