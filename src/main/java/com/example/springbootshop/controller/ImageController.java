@@ -55,12 +55,12 @@ public class ImageController {
     @GetMapping("{productId}")
     public ResponseEntity<Image> getImageToProduct(@PathVariable("productId") Long id) throws FileNotFoundException {
         Image imageToProduct =
-                imageService.getImageToProduct(id)
-                        .orElseThrow(()->new EntityNotFoundException("Cannot find image to Product " + id));
+                imageService.getImageToProduct(id);
 
-        System.out.println("id=" + imageToProduct.getIdImage());
-        System.out.println("name=" + imageToProduct.getName());
-        System.out.println("idProd=" + imageToProduct.getProductId().getIdProduct());
+        if(imageToProduct == null){
+            new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(imageToProduct, HttpStatus.OK);
     }
 

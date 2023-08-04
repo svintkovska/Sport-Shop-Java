@@ -44,9 +44,9 @@ public class ImageService {
     }
 
 
-    public Optional<Image> getImageToProduct(Long productId) throws FileNotFoundException {
-        Optional<Image> imageByProductId = imageRepository.findImageByProductId(productId);
-//                .orElseThrow(() -> new FileNotFoundException("Cannot find image to Product " + productId));
+    public Image getImageToProduct(Long productId) throws FileNotFoundException {
+       Image imageByProductId = imageRepository.findImageByProductId(productId)
+                .orElse(null);
         return imageByProductId;
     }
 
