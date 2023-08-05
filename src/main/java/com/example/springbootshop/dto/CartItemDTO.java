@@ -5,13 +5,15 @@ import lombok.Data;
 
 @Data
 public class CartItemDTO {
+    private long id;
     private Product product;
     private int quantity;
 
     public CartItemDTO() {
     }
 
-    public CartItemDTO(Product product, int quantity) {
+    public CartItemDTO(long id, Product product, int quantity) {
+        this.id = id;
         this.product = product;
         this.quantity = quantity;
     }

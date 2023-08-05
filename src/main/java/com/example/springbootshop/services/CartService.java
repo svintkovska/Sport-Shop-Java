@@ -133,7 +133,7 @@ public class CartService {
         List<CartItem> cartItems = cartItemRepository.findByCart(cart);
         List<CartItemDTO> cartItemDTOs = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
-           cartItemDTOs.add(new CartItemDTO(cartItem.getProduct(), cartItem.getQuantity()));
+           cartItemDTOs.add(new CartItemDTO(cartItem.getIdCartItem(), cartItem.getProduct(), cartItem.getQuantity()));
         }
         return cartItemDTOs;
 
