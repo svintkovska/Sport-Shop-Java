@@ -89,16 +89,18 @@ public class CartService {
         return cartRepository.save(cart);
     }
 
-    public CartItem updateCartItemQuantity(Long cartId, Long cartItemId, int quantity) {
+    public CartItemDTO updateCartItemQuantity(Long cartId, Long cartItemId, int quantity) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
 
         CartItem cartItem = cartItemRepository.getById(cartItemId);
-
+        if(cartItem == null){
+            return null;
+        }
         cartItem.setQuantity(quantity);
         cartItemRepository.save(cartItem);
-
-        return cartItem;
+        CartItemDTO cartItemDTO = new CartItemDTO(cartId, cartItem.getProduct(), quantity);
+        return cartItemDTO;
     }
     public void clearCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));

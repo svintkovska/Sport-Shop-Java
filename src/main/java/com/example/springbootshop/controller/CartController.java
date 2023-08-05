@@ -5,8 +5,10 @@ import com.example.springbootshop.entities.Cart;
 import com.example.springbootshop.entities.CartItem;
 import com.example.springbootshop.entities.User;
 import com.example.springbootshop.services.CartService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -51,14 +53,18 @@ public class CartController {
         return ResponseEntity.ok(updatedCart);
     }
 
-    @PutMapping("/itemQuantity/{cartItemId}") public ResponseEntity<CartItem> updateCartItemQuantity( @PathVariable Long cartItemId,
+    @PutMapping("/itemQuantity/{cartItemId}") public ResponseEntity<CartItemDTO> updateCartItemQuantity( @PathVariable Long cartItemId,
                                                             @RequestBody int quantity,
                                                             Authentication authentication) {
 
         User user = (User) authentication.getPrincipal();
         Cart cart = cartService.getCartByUser(user);
 
-        CartItem updatedCartItem= cartService.updateCartItemQuantity(cart.getIdCart(), cartItemId, quantity);
+        CartItemDTO updatedCartItem= cartService.updateCartItemQuantity(cart.getIdCart(), cartItemId, quantity);
+        if(updatedCartItem == null)
+        {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return ResponseEntity.ok(updatedCartItem);
     }
 
