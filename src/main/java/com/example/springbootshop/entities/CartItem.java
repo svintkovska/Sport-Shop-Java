@@ -13,7 +13,7 @@ public class CartItem {
     @Column(name = "id_cart_item")
     private Long idCartItem;
     private int quantity;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne(fetch = FetchType.LAZY)

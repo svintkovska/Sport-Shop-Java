@@ -1,5 +1,6 @@
 package com.example.springbootshop.controller;
 
+import com.example.springbootshop.dto.CartItemDTO;
 import com.example.springbootshop.entities.Cart;
 import com.example.springbootshop.entities.CartItem;
 import com.example.springbootshop.entities.User;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,10 +26,11 @@ public class CartController {
 
 
     @GetMapping("/")
-    public ResponseEntity<Cart> getCurrentUserCart(Authentication authentication) {
+    public ResponseEntity<List<CartItemDTO>> getCurrentUserCart(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Cart cart = cartService.getCartByUser(user);
-        return ResponseEntity.ok(cart);
+        List<CartItemDTO> cartItems = cartService.getCartItems(cart);
+        return ResponseEntity.ok(cartItems);
     }
 
     @PostMapping("/addItem")

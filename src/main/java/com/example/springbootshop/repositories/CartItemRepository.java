@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-    void deleteAllByCart(Cart cart);
+
     List<CartItem> findByCart(Cart cart);
 
 }

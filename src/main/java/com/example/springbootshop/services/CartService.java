@@ -1,10 +1,12 @@
 package com.example.springbootshop.services;
 
+import com.example.springbootshop.dto.CartItemDTO;
 import com.example.springbootshop.entities.*;
 import com.example.springbootshop.exceptions.EntityNotFoundException;
 import com.example.springbootshop.repositories.CartItemRepository;
 import com.example.springbootshop.repositories.CartRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CartService {
@@ -125,5 +128,14 @@ public class CartService {
         }
 
         return totalPrice;
+    }
+    public List<CartItemDTO> getCartItems(Cart cart){
+        List<CartItem> cartItems = cartItemRepository.findByCart(cart);
+        List<CartItemDTO> cartItemDTOs = new ArrayList<>();
+        for (CartItem cartItem : cartItems) {
+           cartItemDTOs.add(new CartItemDTO(cartItem.getProduct(), cartItem.getQuantity()));
+        }
+        return cartItemDTOs;
+
     }
 }
