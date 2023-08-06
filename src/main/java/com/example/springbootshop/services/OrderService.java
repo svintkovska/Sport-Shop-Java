@@ -52,9 +52,8 @@ public class OrderService {
             orderItemRepository.save(orderItem);
         }
         List<OrderItemDTO> orderItemsWithQuantities = getOrderItemsWithQuantities(savedOrderEntity.getIdOrder());
-        UserDTO userDTO = new UserDTO(user.getId(), user.getName(), user.getUsername());
         OrderStatusDTO orderStatusDTO = new OrderStatusDTO(savedOrderEntity.getOrderStatus().getIdOrderStatus(), savedOrderEntity.getOrderStatus().getName());
-        OrderDTO orderDTO = new OrderDTO(savedOrderEntity.getIdOrder(), userDTO, orderItemsWithQuantities, orderStatusDTO);
+        OrderDTO orderDTO = new OrderDTO(savedOrderEntity.getIdOrder(), user, orderItemsWithQuantities, orderStatusDTO);
 
         cartService.clearCart(cart.getIdCart());
         return orderDTO;
