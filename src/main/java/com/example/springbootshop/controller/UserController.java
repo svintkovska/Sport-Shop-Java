@@ -1,6 +1,7 @@
 package com.example.springbootshop.controller;
 
 import com.example.springbootshop.dto.UserDTO;
+import com.example.springbootshop.entities.Role;
 import com.example.springbootshop.entities.User;
 import com.example.springbootshop.facade.UserFacade;
 import com.example.springbootshop.services.UserService;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user")
@@ -36,7 +38,12 @@ public class UserController {
         UserDTO userDTO = userFacade.userToUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
-
+    @GetMapping("/getRoles")
+    public ResponseEntity<Set<Role>> getCurrentUserRoles(Principal principal){
+        User user = userService.getCurrentUser(principal);
+        Set<Role> roles = userService.getRoles(user);
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
     @GetMapping("/{userId}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable("userId") Long userId){
         User user = userService.getUserById(userId);
