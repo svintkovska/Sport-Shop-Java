@@ -1,5 +1,6 @@
 package com.example.springbootshop.controller;
 
+import com.example.springbootshop.dto.OrderDTO;
 import com.example.springbootshop.dto.OrderWithProductsDTO;
 import com.example.springbootshop.entities.Cart;
 import com.example.springbootshop.entities.OrderEntity;
@@ -26,10 +27,10 @@ public class OrderController {
     }
 
     @PostMapping("/makeOrder")
-    public ResponseEntity<OrderEntity> makeOrder(Authentication authentication) {
+    public ResponseEntity<OrderDTO> makeOrder(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Cart cart = cartService.getCartByUser(user);
-        OrderEntity createdOrderEntity = orderService.makeOrder(user, cart);
+        OrderDTO createdOrderEntity = orderService.makeOrder(user, cart);
         return ResponseEntity.ok(createdOrderEntity);
     }
     @GetMapping("/history")

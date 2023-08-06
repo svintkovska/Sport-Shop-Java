@@ -12,6 +12,9 @@ public class OrderDTO {
     private List<OrderItemDTO> orderItems;
     private OrderStatusDTO orderStatus;
 
+    public OrderDTO() {
+    }
+
     public OrderDTO(Long orderId, UserDTO user, List<OrderItemDTO> orderItems, OrderStatusDTO orderStatus) {
         this.orderId = orderId;
         this.user = user;
