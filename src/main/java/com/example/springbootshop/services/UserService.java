@@ -80,5 +80,9 @@ public class UserService  {
     public Set<Role> getRoles(User user) {
         return user.getRoles();
     }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }
 

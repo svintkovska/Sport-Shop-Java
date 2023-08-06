@@ -118,9 +118,17 @@ public class AdminController {
         List<Role> roles = userService.getAllRoles();
         return ResponseEntity.ok(roles);
     }
+
+
     @PutMapping("/user/{userId}/roles")
     public ResponseEntity<User> changeUserRoles(@PathVariable Long userId, @RequestBody Set<ERole> newRoles) {
         User updatedUser = userService.changeUserRoles(userId, newRoles);
         return ResponseEntity.ok(updatedUser);
+    }
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

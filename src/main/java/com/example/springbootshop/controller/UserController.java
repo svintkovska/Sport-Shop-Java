@@ -50,4 +50,5 @@ public class UserController {
         UserDTO userDTO = userFacade.userToUserDTO(user);
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
 }
